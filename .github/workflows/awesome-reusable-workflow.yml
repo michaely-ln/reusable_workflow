@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Read Name Input
-        run: echo ${{ your_name }}
+        run: echo ${{ inputs.your_name }}
   show-context:
     runs-on: ubuntu-latest
     steps:
