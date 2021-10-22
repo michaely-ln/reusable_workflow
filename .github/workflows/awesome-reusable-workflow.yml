@@ -6,10 +6,11 @@ on:
         default: 'you did not tell me your name'
         required: false
         type: string
- jobs:
-   print_name:
-     name: Print Your Name
-     runs-on: ubuntu-latest
-     steps:
-       - name: Read Name Input
-         run: echo $your_name
+        
+jobs:
+  print_name:
+    name: Print Your Name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read Name Input
+        run: echo $your_name
