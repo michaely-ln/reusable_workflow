@@ -43,4 +43,4 @@ jobs:
         run: echo "$MATRIX_CONTEXT"
 
   invoke-workflow:
-    uses: michaely-ln/reusable_workflow/.github/workflows/awesome-reusable-workflow.yml@refs/heads/main
+    uses: michaely-ln/reusable_workflow/.github/workflows/awesome-reusable-workflow.yml@main
