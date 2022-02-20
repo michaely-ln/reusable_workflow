@@ -47,7 +47,7 @@ jobs:
   invoke-reusable-workflow:
     uses: michaely-ln/reusable_workflow/.github/workflows/awesome-reusable-workflow.yml@main
     with:
-      your_name: ${{ github.event.inputs.name }}
-      #your_name: ${{ env.NAME }}
+      #your_name: ${{ github.event.inputs.name }}
+      your_name: ${{ env.NAME }}
     secrets:
       token: 'dont make secrets in plain text'
