@@ -35,7 +35,7 @@ jobs:
     uses: michaely-ln/reusable_workflow/.github/workflows/awesome-reusable-workflow.yml@main
     with:
       #your_name: ${{ github.event.inputs.name }} #inputs are only set on workflow_dispatch, so the reusable workflow will fail on other triggers if the input is required and you use this method
-      your_name: ${{ env.NAME }}  #this is the way I want it to work, by assigning env inline and then passing it directly
+      #your_name: ${{ env.NAME }}  #this is the way I want it to work, by assigning env inline and then passing it directly
       #your_name: ${{ needs.set-env.outputs.name }} #this is the way it does work. Set var in a step, require the step's parent job with 'needs', set an output in step 
       your_name: ${{ needs.set-env.steps.assign-value.outputs.out-name2 }} #you don't have to pass step output up to job output if you specify jobid->stepid
     secrets:
