@@ -6,14 +6,24 @@ on:
         default: 'you did not tell me your name'
         required: false
         type: string
-        
+    secrets:
+      token:
+        description: 'Personal Access Token'
+        required: true    
 jobs:
   print_name:
     name: Print Your Name
     runs-on: ubuntu-latest
     steps:
       - name: Read Name Input
-        run: echo ${{ inputs.your_name }}
+        run: echo "Hello, ${{ inputs.your_name }}"
+  evaluate-token:
+    name: Evaluate Token
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test for Empty Token
+        run: |
+          [[ ! -z "${{ secrets.token }}" ]] && echo "secrets.token was passed a value" || echo "secrets.token wasn't passed successfully"
   show-context:
     runs-on: ubuntu-latest
     steps:
