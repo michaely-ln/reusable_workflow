@@ -9,10 +9,12 @@ on:
 #    branches: [main]
   workflow_dispatch:
     inputs:
-      approve-release:
-        description: 'Release to Jfrog'
+      name:
+        description: 'Input your name.'
         required: true
         default: 'true'
+env:
+  NAME: ${{ github.event.inputs.name || 'Assigning a default value in env since workflow was triggered by code change instead of dispatch.' }}
 jobs:
   show-caller-context:
     runs-on: ubuntu-latest
@@ -42,5 +44,10 @@ jobs:
           MATRIX_CONTEXT: ${{ toJSON(matrix) }}
         run: echo "$MATRIX_CONTEXT"
 
-  invoke-workflow:
+  invoke-reusable-workflow:
     uses: michaely-ln/reusable_workflow/.github/workflows/awesome-reusable-workflow.yml@main
+    with:
+      your_name: ${{ github.event.inputs.name }}
+      #your_name: ${{ env.NAME }}
+    secrets:
+      token: 'dont make secrets in plain text'
