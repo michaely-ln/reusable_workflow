@@ -14,8 +14,30 @@ on:
         required: true
         default: 'true'
 env:
+  # juicy syntax ahead- the assignment below uses the OR operator.  it's processed from left to right, so if the value on the left isn't null it's used and processing stops
+  #if the value on the left IS null, it keeps going until it can find one that isn't (value on the right)
+  #this lets you take an input and set a default in one shot
   NAME: ${{ github.event.inputs.name || 'Assigning a default value in env since workflow was triggered by code change instead of dispatch.' }}
 jobs:
+  set-env:
+    runs-on: ubuntu-latest
+    steps:
+      -name: assign value
+       run: |
+          echo "ENV_NAME=${{ github.event.inputs.debug || 'false' }}" >> $GITHUB_ENV #this appends your <name=value> pair to the env file for the assign value job context, not the workflow context.
+          echo "::set-output name=out-name::${{ env.ENV_NAME }}" #read env var above
+          echo "::set-output name=out-name2::${{ github.event.inputs.name || 'false' }}" #doing the same thing as above in one line
+          
+  invoke-reusable-workflow:
+    needs: [set-env]
+    uses: michaely-ln/reusable_workflow/.github/workflows/awesome-reusable-workflow.yml@main
+    with:
+      #your_name: ${{ github.event.inputs.name }} #inputs are only set on workflow_dispatch, so the reusable workflow will fail on other triggers if the input is required and you use this method
+      your_name: ${{ env.NAME }}  #this is the way I want it to work, by assigning env inline and then passing it directly
+      #your_name: ${{ needs.set-env.outputs.name }} #this is the way it does work. Set var in a step, require the step's parent job with 'needs', set an output in step 
+    secrets:
+      token: 'dont make secrets in plain text'
+      
   show-caller-context:
     runs-on: ubuntu-latest
     steps:
@@ -44,10 +66,3 @@ jobs:
           MATRIX_CONTEXT: ${{ toJSON(matrix) }}
         run: echo "$MATRIX_CONTEXT"
 
-  invoke-reusable-workflow:
-    uses: michaely-ln/reusable_workflow/.github/workflows/awesome-reusable-workflow.yml@main
-    with:
-      #your_name: ${{ github.event.inputs.name }}
-      your_name: ${{ env.NAME }}
-    secrets:
-      token: 'dont make secrets in plain text'
